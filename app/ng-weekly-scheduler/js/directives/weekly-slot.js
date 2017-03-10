@@ -15,7 +15,7 @@ angular.module('weeklyScheduler')
 
         var pixelToVal = function (pixel) {
           var percent = pixel / containerEl[0].clientWidth;
-          return Math.floor(percent * conf.nbWeeks + 0.5);
+          return Math.floor(percent * conf.nbDays + 0.5);
         };
 
         var mergeOverlaps = function () {
@@ -124,7 +124,7 @@ angular.module('weeklyScheduler')
             } else {
               var newEnd = Math.round(valuesOnDragStart.end + delta);
 
-              if (ui.end !== newEnd && newEnd >= ui.start + 1 && newEnd <= conf.nbWeeks) {
+              if (ui.end !== newEnd && newEnd >= ui.start + 1 && newEnd <= conf.nbDays) {
                 ngModelCtrl.$setViewValue({
                   start: ui.start,
                   end: newEnd
@@ -142,7 +142,7 @@ angular.module('weeklyScheduler')
             var newStart = Math.round(valuesOnDragStart.start + delta);
             var newEnd = Math.round(newStart + duration);
 
-            if (ui.start !== newStart && newStart >= 0 && newEnd <= conf.nbWeeks) {
+            if (ui.start !== newStart && newStart >= 0 && newEnd <= conf.nbDays) {
               ngModelCtrl.$setViewValue({
                 start: newStart,
                 end: newEnd
@@ -157,8 +157,9 @@ angular.module('weeklyScheduler')
 
         //// UI -> model ////////////////////////////////////
         ngModelCtrl.$parsers.push(function onUIChange(ui) {
-          ngModelCtrl.$modelValue.start = timeService.addWeek(conf.minDate, ui.start).toDate();
-          ngModelCtrl.$modelValue.end = timeService.addWeek(conf.minDate, ui.end).toDate();
+          ngModelCtrl.$modelValue.start = timeService.addDay(conf.minDate, ui.start).toDate();
+          console.log(conf.minDate);
+          ngModelCtrl.$modelValue.end = timeService.addDay(conf.minDate, ui.end).toDate();
           //$log.debug('PARSER :', ngModelCtrl.$modelValue.$$hashKey, index, scope.$index, ngModelCtrl.$modelValue);
           schedulerCtrl.on.change(index, scope.$index, ngModelCtrl.$modelValue);
           return ngModelCtrl.$modelValue;
@@ -167,8 +168,8 @@ angular.module('weeklyScheduler')
         //// model -> UI ////////////////////////////////////
         ngModelCtrl.$formatters.push(function onModelChange(model) {
           var ui = {
-            start: timeService.weekPreciseDiff(conf.minDate, moment(model.start), true),
-            end: timeService.weekPreciseDiff(conf.minDate, moment(model.end), true)
+            start: timeService.dayPreciseDiff(conf.minDate, moment(model.start), true),
+            end: timeService.dayPreciseDiff(conf.minDate, moment(model.end + 1), true)
           };
           //$log.debug('FORMATTER :', index, scope.$index, ui);
           return ui;
@@ -177,8 +178,8 @@ angular.module('weeklyScheduler')
         ngModelCtrl.$render = function () {
           var ui = ngModelCtrl.$viewValue;
           var css = {
-            left: ui.start / conf.nbWeeks * 100 + '%',
-            width: (ui.end - ui.start) / conf.nbWeeks * 100 + '%'
+            left: ui.start / conf.nbDays * 100 + '%',
+            width: (ui.end - ui.start) / conf.nbDays * 100 + '%'
           };
 
           //$log.debug('RENDER :', index, scope.$index, css);

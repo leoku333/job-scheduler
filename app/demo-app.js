@@ -18,7 +18,7 @@ angular.module('demoApp', ['ngAnimate', 'weeklyScheduler', 'weeklySchedulerI18N'
           label: 'Item 1',
           editable: false,
           schedules: [
-            {start: moment('2015-12-27').toDate(), end: moment('2016-08-01').toDate()}
+            {start: moment('2017-7-27').toDate(), end: moment('2017-08-01').toDate()}
           ]
         }]
       };
@@ -27,8 +27,8 @@ angular.module('demoApp', ['ngAnimate', 'weeklyScheduler', 'weeklySchedulerI18N'
         $scope.model.items = $scope.model.items.concat([{
           label: 'Item 2',
           schedules: [
-            {start: moment('2016-05-03').toDate(), end: moment('2017-02-01').toDate()},
-            {start: moment('2015-11-20').toDate(), end: moment('2016-02-01').toDate()}
+            {start: moment('2017-01-03').toDate(), end: moment('2017-02-01').toDate()},
+            {start: moment('2017-01-20').toDate(), end: moment('2017-02-01').toDate()}
           ]
         }, {
           label: 'Item 3',

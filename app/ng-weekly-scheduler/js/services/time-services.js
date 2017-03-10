@@ -25,11 +25,14 @@ angular.module('weeklyScheduler')
           return dateAsMoment[method](lastMin) ? dateAsMoment : lastMin;
         }
       },
-      addWeek: function (moment, nbWeek) {
-        return moment.clone().add(nbWeek, WEEK);
+      addDay: function (moment, nbDay) {
+        return moment.clone().add(nbDay, DAY);
       },
-      weekPreciseDiff: function (start, end) {
-        return end.clone().diff(start.clone(), WEEK, true);
+      dayPreciseDiff: function (start, end) {
+        return end.clone().diff(start.clone(), DAY, true);
+      },
+      dayDiff: function (start, end) {
+        return end.clone().endOf(DAY).diff(start.clone().startOf(DAY), DAY) + 1;
       },
       weekDiff: function (start, end) {
         return end.clone().endOf(WEEK).diff(start.clone().startOf(WEEK), WEEK) + 1;
@@ -50,14 +53,18 @@ angular.module('weeklyScheduler')
           var startOfMonth = i === 0 ? startDate : startDate.add(1, MONTH).startOf(MONTH);
           var endOfMonth = i === monthDiff - 1 ? endDate : startDate.clone().endOf(MONTH);
           var dayInMonth = endOfMonth.diff(startOfMonth, DAY) + (i !== monthDiff - 1 && 1);
-          var width = Math.floor(dayInMonth / dayDiff * 1E8) / 1E6;
+          // var width = Math.floor(dayInMonth / dayDiff * 1E8) / 1E6;
 
-          result.push({start: startOfMonth.clone(), end: endOfMonth.clone(), width: width});
+          result.push({start: startOfMonth.clone(), end: endOfMonth.clone(), dayInMonth: dayInMonth});
+
+          // should give me and days in each month
+          // if jan-march should be [31, 28, 31]
+          // if i pull the dayInMonth values out
 
           // totalDays += dayInMonth; total += width;
           // console.log(startOfMonth, endOfMonth, dayInMonth, dayDiff, width, total, totalDays);
         }
         return result;
-      }
+      },
     };
   }]);
